@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, ZoomIn, ZoomOut, ChevronDown } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
@@ -6,7 +6,7 @@ import { useCallback, useMemo, useState } from "react";
 const Tree = () => {
   const { memberId } = useParams();
   const navigate = useNavigate();
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoomLevel, setZoomLevel] = useState(0.7);
   const [visibleGenerations, setVisibleGenerations] = useState(4);
 
   // Mémorisation des données familiales pour éviter les re-calculs inutiles
@@ -109,19 +109,32 @@ const Tree = () => {
     const isSelected = member.id === memberId;
     const hasChildren = member.children && member.children.length > 0;
 
-    // Calculer la taille en fonction du niveau de zoom
-    const baseSize = 20; // Taille de base de l'image
+    const baseSize = 15;
     const adjustedSize = Math.floor(baseSize * zoomLevel);
 
     // Définir une couleur de fond différente selon la génération
     const getBgColor = () => {
-      if (genIndex === -1) return "bg-yellow-200"; // Patriarche
+      if (genIndex === -1) return "rgb(254, 240, 138)"; // yellow-200
       switch (genIndex) {
-        case 0: return "bg-blue-200";
-        case 1: return "bg-green-200";
-        case 2: return "bg-violet-200";
-        case 3: return "bg-gray-200";
-        default: return "bg-gray-300";
+        case 0: return "rgb(191, 219, 254)"; // blue-200
+        case 1: return "rgb(187, 247, 208)"; // green-200
+        case 2: return "rgb(221, 214, 254)"; // violet-200
+        case 3: return "rgb(229, 231, 235)"; // gray-200
+        default: return "rgb(209, 213, 219)"; // gray-300
+      }
+    };
+
+    // Animation variants pour la sélection
+    const cardVariants = {
+      selected: {
+        scale: 1.1,
+        backgroundColor: "rgb(253, 224, 71)", // yellow-300
+        transition: { duration: 0.3 }
+      },
+      unselected: {
+        scale: 1,
+        backgroundColor: getBgColor(),
+        transition: { duration: 0.3 }
       }
     };
 
@@ -131,13 +144,30 @@ const Tree = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: Math.min(memIndex * 0.1, 1) }}
-        className={`relative ${isSelected ? "ring-4 ring-family-blue rounded-xl" : ""}`}
+        className="relative"
       >
-        <div className={`${getBgColor()} backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-200`}
-             style={{ width: `${adjustedSize * 4}px` }}>
-          <div 
-            className="rounded-lg overflow-hidden mb-2"
-            style={{ width: `${adjustedSize * 2}px`, height: `${adjustedSize * 2}px` }}
+        <motion.div 
+          className={`backdrop-blur-sm rounded-full p-4 shadow-lg border border-gray-200 flex flex-col items-center
+            ${isSelected ? "ring-4 ring-yellow-400" : ""}`}
+          style={{ 
+            width: `${adjustedSize * 4}px`, 
+            height: `${adjustedSize * 4}px` 
+          }}
+          variants={cardVariants}
+          initial="unselected"
+          animate={isSelected ? "selected" : "unselected"}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate(`/tree/${member.id}`)}
+        >
+          <motion.div 
+            className="rounded-full overflow-hidden mb-2"
+            style={{ 
+              width: `${adjustedSize * 2}px`, 
+              height: `${adjustedSize * 2}px`,
+              minWidth: "50px",
+              minHeight: "50px"
+            }}
           >
             <img
               loading="lazy"
@@ -145,36 +175,42 @@ const Tree = () => {
               alt={member.name}
               className="w-full h-full object-cover"
             />
+          </motion.div>
+          <div className="text-center">
+            <h3 
+              className="text-lg font-semibold text-family-dark"
+              style={{ fontSize: `${Math.max(14 * zoomLevel, 12)}px` }}
+            >
+              {member.name}
+            </h3>
+            <p 
+              className="text-sm text-gray-600"
+              style={{ fontSize: `${Math.max(12 * zoomLevel, 10)}px` }}
+            >
+              {member.relationship}
+            </p>
           </div>
-          <h3 className={`text-lg font-semibold text-family-dark`}
-              style={{ fontSize: `${Math.max(14 * zoomLevel, 12)}px` }}>
-            {member.name}
-          </h3>
-          <p className="text-sm text-gray-600"
-             style={{ fontSize: `${Math.max(12 * zoomLevel, 10)}px` }}>
-            {member.relationship}
-          </p>
-        </div>
+        </motion.div>
         {hasChildren && genIndex < visibleGenerations - 1 && (
           <div className="absolute left-1/2 bottom-0 w-px h-8 bg-family-dark transform translate-y-full" />
         )}
       </motion.div>
     );
-  }, [memberId, zoomLevel, visibleGenerations]);
+  }, [memberId, zoomLevel, visibleGenerations, navigate]);
 
   // Contrôles de zoom et de générations visibles
   const zoomControls = (
     <div className="fixed bottom-4 right-4 flex flex-col gap-2">
       <div className="bg-white rounded-lg shadow-lg p-2 flex flex-col gap-2">
         <button
-          onClick={() => setZoomLevel(prev => Math.min(prev + 0.2, 2.0))}
+          onClick={() => setZoomLevel(prev => Math.min(prev + 0.2, 2.5))}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           title="Agrandir"
         >
           <ZoomIn size={20} />
         </button>
         <button
-          onClick={() => setZoomLevel(prev => Math.max(prev - 0.2, 0.8))}
+          onClick={() => setZoomLevel(prev => Math.max(prev - 0.2, 0.5))}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           title="Réduire"
         >
