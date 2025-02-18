@@ -1,4 +1,49 @@
-# Welcome to your Lovable project
+# Raouane Tree
+
+Une application web interactive pour explorer et visualiser l'arbre généalogique de la famille Raouane.
+
+## Fonctionnalités
+
+- 🌳 Visualisation interactive de l'arbre généalogique
+- 🔍 Zoom et navigation fluide
+- 🎨 Interface utilisateur intuitive avec des couleurs par génération
+- 🎯 Sélection et focus sur les membres de la famille
+- 📱 Design responsive
+
+## Technologies utilisées
+
+- React + Vite
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lucide Icons
+
+## Installation
+
+```bash
+# Cloner le repository
+git clone https://github.com/gitBakr/raouane-tree.git
+
+# Accéder au dossier
+cd raouane-tree
+
+# Installer les dépendances
+npm install
+
+# Lancer l'application
+npm run dev
+```
+
+## Structure du projet
+
+```
+src/
+  ├── pages/
+  │   ├── Index.tsx    # Page d'accueil
+  │   ├── Select.tsx   # Sélection des membres
+  │   └── Tree.tsx     # Visualisation de l'arbre
+  └── ...
+```
 
 ## Project info
 
@@ -49,16 +94,6 @@ npm run dev
 - Select the "Codespaces" tab.
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
 
 ## How can I deploy this project?
 
