@@ -8,11 +8,20 @@ const Select = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  // Simulation de données de membres de la famille
   const familyMembers = [
-    { id: "1", name: "Jean Dupont", relationship: "Grand-père", photo: "placeholder.svg" },
-    { id: "2", name: "Marie Dupont", relationship: "Grand-mère", photo: "placeholder.svg" },
-    // Ajoutez plus de membres ici
+    { id: "1", name: "Omar", relationship: "Patriarche", photo: "placeholder.svg" },
+    { id: "2", name: "Mohamed", relationship: "Grand-père", photo: "placeholder.svg" },
+    { id: "3", name: "Tahar", relationship: "Père", photo: "placeholder.svg" },
+    { id: "4", name: "Fatima", relationship: "Mère", photo: "placeholder.svg" },
+    { id: "5", name: "Lassad", relationship: "Frère", photo: "placeholder.svg" },
+    { id: "6", name: "Youssef", relationship: "Frère", photo: "placeholder.svg" },
+    { id: "7", name: "Mohamed", relationship: "Utilisateur", photo: "placeholder.svg" },
+    { id: "8", name: "Esma", relationship: "Nièce", photo: "placeholder.svg" },
+    { id: "9", name: "Souad", relationship: "Nièce", photo: "placeholder.svg" },
+    { id: "10", name: "Zineb", relationship: "Nièce", photo: "placeholder.svg" },
+    { id: "11", name: "Meriem", relationship: "Nièce", photo: "placeholder.svg" },
+    { id: "12", name: "Aicha", relationship: "Fille", photo: "placeholder.svg" },
+    { id: "13", name: "Houda", relationship: "Fille", photo: "placeholder.svg" },
   ];
 
   const filteredMembers = familyMembers.filter(
